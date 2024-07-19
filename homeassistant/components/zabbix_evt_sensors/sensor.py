@@ -22,7 +22,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the config entry for zabbix sensor."""
-    _LOGGER.info("Instantiating DataUpdateCoordinator")
+    _LOGGER.debug("Instantiating DataUpdateCoordinator")
     coordinator = ZabbixUpdateCoordinator(
         hass,
         _LOGGER,
@@ -63,15 +63,15 @@ class ZabbixSensor(CoordinatorEntity, SensorEntity):
             name=f"{prefix} {self.zabbix_sensor_type_name}",
             configuration_url=coordinator.zbx.url,
             manufacturer="Zabbix SIA",
-            sw_version=coordinator.zbx.zapi.version.public,
+            sw_version=f"{coordinator.zbx.version.major}.{coordinator.zbx.version.minor}",
         )
         self._attr_should_poll = True
-        _LOGGER.info("Created Zabbix sensor entity zbx_%s", self._attr_name)
+        _LOGGER.debug("Created Zabbix sensor entity zbx_%s", self._attr_name)
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        _LOGGER.info("Updating entity %s state", self.name)
+        _LOGGER.debug("Updating entity %s state", self.name)
         entity_values = self.coordinator.data[self.zabbix_sensor_type_key].get(
             self._attr_name, []
         )

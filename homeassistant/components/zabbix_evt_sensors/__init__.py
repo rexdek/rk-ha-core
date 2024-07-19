@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import logging
 
-from pyzabbix import ZabbixAPIException
 import urllib3
+from zabbix_utils import APIRequestError
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
@@ -42,10 +42,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     try:
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    except ZabbixAPIException as err:
+    except APIRequestError as err:
         raise ConfigEntryNotReady(err) from err
     else:
-        _LOGGER.info(
+        _LOGGER.debug(
             "Created Zabbix Event Sensor Host %s", entry.data[CONFIG_KEY][CONF_HOST]
         )
     return True
@@ -55,7 +55,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         hass.data[DOMAIN].pop(entry.entry_id)
-        _LOGGER.info(
+        _LOGGER.debug(
             "Removed Zabbix Event Sensor Host %s", entry.data[CONFIG_KEY][CONF_HOST]
         )
     return unload_ok

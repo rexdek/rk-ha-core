@@ -5,8 +5,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from pyzabbix import ZabbixAPIException
 import voluptuous as vol
+from zabbix_utils import APIRequestError
 
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigFlowResult
@@ -96,7 +96,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
             try:
                 await validate_input(self.hass, user_input)
-            except ZabbixAPIException:
+            except APIRequestError:
                 errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
                 _LOGGER.exception("Unexpected exception")

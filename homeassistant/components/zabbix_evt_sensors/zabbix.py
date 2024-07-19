@@ -4,8 +4,8 @@ import contextlib
 from itertools import chain
 import logging
 
-from pyzabbix.api import ZabbixAPI
 import urllib3
+from zabbix_utils import ZabbixAPI
 
 urllib3.disable_warnings()
 
@@ -54,10 +54,9 @@ class Zbx:
         self.ssl = ssl
         self.protocol = "https" if self.ssl else "http"
         self.url = f"{self.protocol}://{self.host}:{self.port}/{self.path}"
-        self.zapi = ZabbixAPI(self.url)
-        self.zapi.session.verify = False
-        self.zapi.login(api_token=self.api_token)
-        self.version = getattr(self.zapi.version, "public")
+        self.zapi = ZabbixAPI(self.url, validate_certs=False)
+        self.zapi.login(token=self.api_token)
+        self.version = self.zapi.version
 
     def _get_problems(self):
         """Get Zabbix problems."""

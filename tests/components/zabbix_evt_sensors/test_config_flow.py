@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from pyzabbix import ZabbixAPIException
+from zabbix_utils import APIRequestError
 
 from homeassistant import config_entries
 from homeassistant.components.zabbix_evt_sensors.const import DOMAIN
@@ -54,7 +54,7 @@ async def test_invalid_auth(hass: HomeAssistant) -> None:
     """Test for invalid API token."""
     with patch(
         "homeassistant.components.zabbix_evt_sensors.config_flow.validate_input",
-        side_effect=ZabbixAPIException,
+        side_effect=APIRequestError,
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, data=TEST_USER_INPUT, context={"source": config_entries.SOURCE_USER}
