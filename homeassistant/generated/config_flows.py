@@ -137,6 +137,7 @@ FLOWS = {
         "duotecno",
         "dwd_weather_warnings",
         "dynalite",
+        "dyson",
         "eafm",
         "easyenergy",
         "ecobee",

@@ -1,0 +1,13 @@
+{
+  "domain": "dyson",
+  "name": "dyson",
+  "codeowners": ["@rexdek"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/dyson",
+  "homekit": {},
+  "iot_class": "local_polling",
+  "requirements": ["libpurecool==0.6.4"],
+  "ssdp": [],
+  "zeroconf": []
+}
